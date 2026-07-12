@@ -1,7 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Loader2, Search } from "lucide-react";
 import {
-	type FormEvent,
 	useCallback,
 	useEffect,
 	useMemo,
@@ -29,6 +27,8 @@ import {
 	type SeasonalityResult,
 	type YahooChartQuote,
 } from "#/lib/seasonality";
+import { SearchSymbol } from "#/components/search-symbol";
+import { getSymbolData } from "#/api/api";
 
 export const Route = createFileRoute("/")({ component: Home });
 
@@ -62,9 +62,6 @@ const chartConfig = {
 
 type ChartSeriesKey = keyof typeof chartConfig;
 
-const API_BASE_URL =
-	import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ??
-	"http://localhost:3001";
 const DEFAULT_SYMBOL = "DX-Y.NYB";
 const DEFAULT_LINE_VISIBILITY: Record<ChartSeriesKey, boolean> = {
 	thirtyYear: true,
@@ -139,15 +136,7 @@ function Home() {
 		setError(null);
 
 		try {
-			const response = await fetch(
-				`${API_BASE_URL}/data/${encodeURIComponent(nextSymbol)}`,
-			);
-
-			if (!response.ok) {
-				throw new Error(`Request failed with status ${response.status}.`);
-			}
-
-			const yahooChart = (await response.json()) as YahooChartResponse;
+			const yahooChart = await getSymbolData(nextSymbol) as YahooChartResponse;
 			const seasonality = buildSeasonalityChart(yahooChart.quotes ?? []);
 
 			setChartResult(seasonality);
@@ -203,21 +192,11 @@ function Home() {
 					</div>
 
 					<form
-						className="flex w-full flex-col gap-2 sm:max-w-sm sm:flex-row"
+						className="flex w-full flex-col gap-2 sm:max-w-sm sm:flex-row justify-end"
 						onSubmit={handleSubmit}
 					>
-						<label className="sr-only" htmlFor="symbol">
-							Symbol
-						</label>
-						<input
-							id="symbol"
-							className="h-10 min-w-0 flex-1 rounded-md border bg-background px-3 text-sm font-medium uppercase shadow-xs outline-none transition focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30"
-							disabled={isLoading}
-							onChange={(event) => setInputSymbol(event.target.value)}
-							placeholder="AAPL"
-							value={inputSymbol}
-						/>
-						<button
+						<SearchSymbol loadSymbol={loadSymbol} />
+						{/* <button
 							className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-xs transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
 							disabled={isLoading}
 							type="submit"
@@ -228,7 +207,7 @@ function Home() {
 								<Search className="h-4 w-4" />
 							)}
 							Load
-						</button>
+						</button> */}
 					</form>
 				</header>
 

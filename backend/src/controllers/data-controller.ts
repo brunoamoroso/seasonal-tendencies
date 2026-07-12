@@ -18,3 +18,15 @@ export async function getSymbolData(req: Request, res: Response) {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 }
+
+export async function searchSymbol(req: Request, res: Response) {
+  const { symbol } = req.params;
+  
+  try {
+    const results = await yahooFinance.search(symbol as string);
+    return res.status(200).json(results);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+}
