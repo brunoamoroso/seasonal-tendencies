@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "vite dev --port 3000",
-    "start": "npx serve -s dist -l $PORT",
+    "start": "node dist/server/server.js",
     "clean": "rm -rf dist",
     "generate-routes": "tsr generate",
     "build": "vite build",
