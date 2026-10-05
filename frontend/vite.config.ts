@@ -12,6 +12,7 @@ const config = defineConfig({
     alias: {
       '#': path.resolve(__dirname, './src'),
     },
+    extensions: ['.mts', '.js', '.ts', '.jsx', '.tsx', '.json'],
     tsconfigPaths: true,
   },
   plugins: [devtools(), tailwindcss(), tanstackStart(), viteReact()],
