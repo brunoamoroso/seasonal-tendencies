@@ -27,8 +27,8 @@ import {
 	type SeasonalityResult,
 	type YahooChartQuote,
 } from "#/lib/seasonality";
-import { SearchSymbol } from "@/components/search-symbol";
-import { getSymbolData } from "@/api/api";
+import { SearchSymbol } from "#/components/search-symbol";
+import { getSymbolData } from "#/api/api";
 
 export const Route = createFileRoute("/")({ component: Home });
 
