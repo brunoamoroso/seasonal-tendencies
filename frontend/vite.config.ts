@@ -16,7 +16,11 @@ const config = defineConfig({
     extensions: ['.mts', '.js', '.ts', '.jsx', '.tsx', '.json'],
     tsconfigPaths: true,
   },
-  plugins: [devtools(), tailwindcss(), tanstackStart(), viteReact()],
+  plugins: [devtools(), tailwindcss(), tanstackStart({
+    prerender: {
+      enabled: true,
+    }
+  }), viteReact()],
 })
 
 export default config
